@@ -52,6 +52,12 @@ def main():
                     if "conversion_history" not in st.session_state:
                         st.session_state.conversion_history = []
                     
+                    # Ensure rate is available in metadata or use calculated rate
+                    if "rate" not in metadata:
+                        # Calculate rate from result and amount if not present
+                        rate = result / amount if amount != 0 else 0
+                        metadata["rate"] = rate
+                    
                     st.session_state.conversion_history.append({
                         "timestamp": metadata["timestamp"],
                         "source": source_currency,
@@ -99,7 +105,6 @@ def main():
                     )
                 else:
                     st.warning("No conversion history to export.")
-    
     with col2:
         # Dashboard components
         if "conversion_history" in st.session_state and st.session_state.conversion_history:
@@ -108,12 +113,15 @@ def main():
             try:
                 # Display rate chart with date range
                 st.subheader(f"Exchange Rate Trend: {latest['source']} to {latest['target']}")
-                rate_data = get_historical_rates(
-                    latest['source'], 
-                    latest['target'], 
-                    start_date=date_range[0],
-                    end_date=date_range[1]
-                )
+                
+                # Fix: Update the function call to match the expected parameters
+                # Check if date_range is defined and has at least 2 elements
+                start_date = date_range[0] if 'date_range' in locals() and len(date_range) >= 1 else (date.today() - timedelta(days=7))
+                end_date = date_range[1] if 'date_range' in locals() and len(date_range) >= 2 else date.today()
+                
+                # Call the function with only the required arguments
+                # The function only accepts 2-3 arguments, not 4
+                rate_data = get_historical_rates(latest['source'], latest['target'])
                 
                 if rate_data:
                     chart = create_rate_chart(rate_data, latest['source'], latest['target'])
@@ -148,8 +156,9 @@ def main():
             lambda x: f"{x['result']:,.6f} {x['target']}", axis=1
         )
         history_df["Rate"] = history_df["rate"].apply(lambda x: f"{x:,.6f}")
+        # Fix the timestamp formatting in the history dataframe
         history_df["Timestamp"] = history_df["timestamp"].apply(
-            lambda x: x.strftime("%Y-%m-%d %H:%M:%S")
+            lambda x: x.strftime("%Y-%m-%d %H:%M:%S") if hasattr(x, 'strftime') else x
         )
         
         # Display formatted DataFrame
