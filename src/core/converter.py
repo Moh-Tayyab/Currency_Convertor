@@ -16,8 +16,8 @@ def is_crypto(currency_code: str) -> bool:
     Returns:
         bool: True if cryptocurrency, False if fiat
     """
-    crypto_currencies = ["BTC", "ETH", "USDT", "BNB", "USDC", "XRP", "SOL", "ADA", "DOGE", "DOT"]
-    return currency_code.upper() in crypto_currencies
+    from api.crypto_client import CRYPTO_MAPPING
+    return currency_code.upper() in CRYPTO_MAPPING
 
 def get_exchange_rate(source: str, target: str) -> Tuple[float, Dict[str, Any]]:
     """
@@ -111,18 +111,52 @@ def get_exchange_rate(source: str, target: str) -> Tuple[float, Dict[str, Any]]:
         return rate, metadata
         
     except Exception as e:
-        # Log the error
-        print(f"Error getting exchange rate: {str(e)}")
+        # Log the error with more details
+        error_message = f"Error getting exchange rate for {source} to {target}: {str(e)}"
+        print(error_message)
         
-        # Try to use cached rates if available
-        cached_data = get_cached_rate(source, target, allow_expired=True)
+        # Try to use cached rates with a more robust fallback strategy
+        # First try regular cache
+        cached_data = get_cached_rate(source, target, allow_expired=False)
         if cached_data:
             # Add warning to metadata
-            cached_data["warning"] = "Using cached rate due to API error"
+            cached_data["warning"] = "Using cached rate due to API error (recent cache)"
+            cached_data["error_details"] = str(e)
             return cached_data["rate"], cached_data
         
-        # No cached data available
-        raise RuntimeError(f"Failed to get exchange rate and no cached data available: {str(e)}")
+        # Then try expired cache with a warning
+        expired_cached_data = get_cached_rate(source, target, allow_expired=True)
+        if expired_cached_data:
+            # Add warning to metadata with expiration details
+            expired_cached_data["warning"] = "Using expired cached rate due to API error"
+            expired_cached_data["error_details"] = str(e)
+            
+            # Add cache age information
+            if "cache_age" in expired_cached_data:
+                cache_age_minutes = expired_cached_data["cache_age"] / 60
+                expired_cached_data["cache_age_minutes"] = round(cache_age_minutes, 1)
+                
+            if "seconds_expired" in expired_cached_data:
+                minutes_expired = expired_cached_data["seconds_expired"] / 60
+                expired_cached_data["minutes_expired"] = round(minutes_expired, 1)
+                
+            return expired_cached_data["rate"], expired_cached_data
+        
+        # No cached data available - provide a default rate with error information
+        default_rate = 0.0
+        error_metadata = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "source": source,
+            "target": target,
+            "rate": default_rate,
+            "error": True,
+            "error_message": f"Failed to get exchange rate and no cached data available: {str(e)}",
+            "warning": "Using fallback zero rate due to API errors and no cache available"
+        }
+        
+        # Log the error but return a default value to prevent app crashes
+        print(f"CRITICAL: No rate available for {source} to {target}. Using fallback zero rate.")
+        return default_rate, error_metadata
 
 def convert_currency(amount: float, source_currency: str, target_currency: str = "USD") -> Tuple[float, Dict[str, Any]]:
     """

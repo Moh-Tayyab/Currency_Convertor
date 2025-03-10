@@ -3,7 +3,7 @@ from datetime import date, timedelta, datetime
 import pandas as pd
 from core.converter import convert_currency, get_historical_rates
 from ui.dashboard import create_rate_chart, display_conversion_metadata
-from ui.widgets import create_currency_inputs, create_amount_input, create_theme_toggle
+from ui.widgets import create_currency_inputs, create_amount_input
 from core.cache import initialize_cache
 
 def main():
@@ -11,7 +11,7 @@ def main():
         page_title="Enterprise Currency Converter",
         page_icon="💱",
         layout="wide",
-        initial_sidebar_state="expanded"
+        initial_sidebar_state="collapsed"
     )
     
     # Initialize cache
@@ -21,15 +21,11 @@ def main():
     st.title("Real-Time Currency Converter")
     st.subheader("Enterprise-grade fiat and cryptocurrency conversion platform")
     
-    # Create theme toggle in sidebar
-    with st.sidebar:
-        create_theme_toggle()
-        st.markdown("---")
-        st.markdown("### About")
-        st.info(
-            "This application provides real-time currency conversion "
-            "for both fiat currencies and cryptocurrencies."
-        )
+    # About information (moved from sidebar to main content)
+    st.info(
+        "This application provides real-time currency conversion "
+        "for both fiat currencies and cryptocurrencies."
+    )
     
     # Main conversion interface
     col1, col2 = st.columns([2, 3])
@@ -45,8 +41,22 @@ def main():
                 try:
                     result, metadata = convert_currency(amount, source_currency, target_currency)
                     
-                    # Display result
-                    st.success(f"{amount:,.2f} {source_currency} = {result:,.6f} {target_currency}")
+                    # Check if there was an error in the conversion
+                    if "error" in metadata and metadata["error"]:
+                        st.warning(f"⚠️ {metadata.get('warning', 'Warning: Using fallback rate')}")
+                        st.error(f"Error: {metadata.get('error_message', 'Conversion error')}")
+                        
+                        # Still show the result, but with a warning
+                        st.info(f"{amount:,.2f} {source_currency} = {result:,.6f} {target_currency} (estimated)")
+                    else:
+                        # Display successful result
+                        st.success(f"{amount:,.2f} {source_currency} = {result:,.6f} {target_currency}")
+                    
+                    # Show warning if using cached data
+                    if "warning" in metadata and not metadata.get("error", False):
+                        st.info(f"ℹ️ {metadata['warning']}")
+                        if "cache_age_minutes" in metadata:
+                            st.info(f"Cache age: {metadata['cache_age_minutes']} minutes")
                     
                     # Store in session state for history
                     if "conversion_history" not in st.session_state:
@@ -64,7 +74,8 @@ def main():
                         "target": target_currency,
                         "amount": amount,
                         "result": result,
-                        "rate": metadata["rate"]
+                        "rate": metadata["rate"],
+                        "error": metadata.get("error", False)
                     })
                     
                 except Exception as e:

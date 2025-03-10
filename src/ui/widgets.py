@@ -20,7 +20,8 @@ def create_currency_inputs() -> Tuple[str, str]:
     fiat_currencies = [
         "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", 
         "SEK", "NZD", "MXN", "SGD", "HKD", "NOK", "KRW", "TRY", 
-        "INR", "BRL", "ZAR"
+        "INR", "BRL", "ZAR", "PKR", "AED", "SAR", "MYR", "IDR",
+        "PHP", "THB", "PLN", "ILS"
     ]
     
     # Use all cryptocurrencies from CRYPTO_MAPPING
@@ -52,8 +53,8 @@ def create_currency_inputs() -> Tuple[str, str]:
     col1, col2, col3 = st.columns([2, 1, 2])
     
     with col1:
-        # Add a subtle header with dark mode support
-        header_color = "#8A6FFF" if "theme" in st.session_state and st.session_state.theme == "Dark" else "#6236FF"
+        # Add a subtle header with consistent color
+        header_color = "#6236FF"
         st.markdown(f"""<div style='font-weight: 600; margin-bottom: 8px; color: {header_color};'>Source Currency</div>""", unsafe_allow_html=True)
         
         # Create the selectbox with formatted options
@@ -69,15 +70,9 @@ def create_currency_inputs() -> Tuple[str, str]:
         # Extract the actual currency code (remove the icon)
         source_currency = all_currencies[formatted_options.index(source_option)]
         
-        # Show currency type with colored badge - with improved dark mode support
-        # Check if dark mode is active
-        is_dark_mode = False
-        if "theme" in st.session_state and st.session_state.theme == "Dark":
-            is_dark_mode = True
-            
-        # Set text color based on theme and background color
+        # Set text color and background color
         badge_bg_color = get_currency_color(source_currency)
-        badge_text_color = "#F5F7FF" if is_dark_mode else "white"
+        badge_text_color = "white"
         
         if source_currency in crypto_currencies:
             st.markdown(f"""<div style='display: inline-block; background-color: {badge_bg_color}; 
@@ -90,8 +85,8 @@ def create_currency_inputs() -> Tuple[str, str]:
     
     with col2:
         st.write("###")  # Spacer
-        # Animated arrow with dark mode support
-        arrow_color = "#3ADBF0" if "theme" in st.session_state and st.session_state.theme == "Dark" else "#05BFDB"
+        # Animated arrow with consistent color
+        arrow_color = "#05BFDB"
         st.markdown(f"""
         <div style='text-align: center; font-size: 24px;'>        
             <div class='animated-arrow'>⟶</div>
@@ -111,8 +106,8 @@ def create_currency_inputs() -> Tuple[str, str]:
         """, unsafe_allow_html=True)
     
     with col3:
-        # Add a subtle header with dark mode support
-        header_color = "#8A6FFF" if "theme" in st.session_state and st.session_state.theme == "Dark" else "#6236FF"
+        # Add a subtle header with consistent color
+        header_color = "#6236FF"
         st.markdown(f"""<div style='font-weight: 600; margin-bottom: 8px; color: {header_color};'>Target Currency</div>""", unsafe_allow_html=True)
         
         # Default to BTC if source is USD, otherwise USD
@@ -131,15 +126,9 @@ def create_currency_inputs() -> Tuple[str, str]:
         # Extract the actual currency code (remove the icon)
         target_currency = all_currencies[formatted_options.index(target_option)]
         
-        # Show currency type with colored badge
-        # Check if dark mode is active
-        is_dark_mode = False
-        if "theme" in st.session_state and st.session_state.theme == "Dark":
-            is_dark_mode = True
-            
-        # Set text color based on theme and background color
+        # Set text color and background color
         badge_bg_color = get_currency_color(target_currency)
-        badge_text_color = "#F5F7FF" if is_dark_mode else "white"
+        badge_text_color = "white"
         
         if target_currency in crypto_currencies:
             st.markdown(f"""<div style='display: inline-block; background-color: {badge_bg_color}; 

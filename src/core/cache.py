@@ -4,8 +4,9 @@ import time
 from typing import Dict, Any, Optional
 import streamlit as st
 
-# Cache TTL in seconds (5 minutes)
-CACHE_TTL = 300
+# Cache TTL in seconds (30 minutes for regular cache, 24 hours for emergency fallback)
+CACHE_TTL = 1800  # 30 minutes
+EMERGENCY_CACHE_TTL = 86400  # 24 hours
 
 def initialize_cache():
     """Initialize the rate cache in Streamlit session state if it doesn't exist."""
