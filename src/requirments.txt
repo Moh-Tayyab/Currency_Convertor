@@ -4,3 +4,4 @@ pandas
 typing
 plotly
 streamlit-lottie
+fpdf

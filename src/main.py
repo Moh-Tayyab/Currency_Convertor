@@ -6,6 +6,7 @@ from ui.dashboard import create_rate_chart, display_conversion_metadata
 from ui.widgets import create_currency_inputs, create_amount_input
 from core.cache import initialize_cache
 
+
 def main():
     st.set_page_config(
         page_title="Enterprise Currency Converter",
@@ -107,6 +108,7 @@ def main():
                     # Convert DataFrame to CSV
                     csv = df.to_csv(index=False).encode('utf-8')
                     
+                    # Single download button for CSV
                     st.download_button(
                         label="Download CSV",
                         data=csv,

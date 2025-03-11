@@ -9,13 +9,15 @@ def load_custom_styles():
     <style>
         /* Custom color variables */
         :root {
-            --primary-color: #6236FF;
-            --secondary-color: #05BFDB;
-            --accent-color: #FF5757;
-            --success-color: #00C897;
-            --warning-color: #FFB100;
+            --primary-color: #3CA2A6;
+            --secondary-color: #A5B68D;
+            --accent-color: #CCC375;
+            --success-color: #A0C878;
+            --warning-color: #F7CFD8;
             --light-bg: #F5F7FF;
             --dark-bg: #192655;
+            --orange-text: #EB8317;
+            --peach-text: #FFD7C4;
             --card-border-radius: 12px;
             --transition-speed: 0.3s;
         }
@@ -26,20 +28,26 @@ def load_custom_styles():
             padding-bottom: 2rem;
         }
         
-        /* Add a more modern gradient background to the entire app */
+        /* Add a more modern gradient background to the entire app with the provided color palette */
         .stApp {
-            background: linear-gradient(135deg, var(--light-bg) 0%, #E2E8FF 70%, #D4E2FF 100%);
+            background: linear-gradient(135deg, #A5B68D 0%, #CCC375 25%, #3CA2A6 50%, #A0C878 75%, #F7CFD8 100%);
             background-attachment: fixed;
             background-size: cover;
         }
         
-        /* Header styling with enhanced gradient */
+        /* Header styling with enhanced gradient using the new color palette */
         h1, h2, h3 {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(90deg, #EB8317, #A5B68D);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
             text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Regular text styling with the new peach color */
+        p, li, span, label {
+            color: #FFD7C4;
+            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
         }
         
         /* Button styling with improved hover effects */
@@ -56,9 +64,10 @@ def load_custom_styles():
             box-shadow: 0 8px 15px rgba(98, 54, 255, 0.25);
         }
         
-        /* Primary button styling with gradient */
+        /* Primary button styling with gradient using the new color palette */
         .stButton > button[data-baseweb="button"] {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(90deg, #EB8317, #A0C878);
+            color: #FFD7C4;
         }
         
         /* Card styling for containers with glass morphism effect */
@@ -83,7 +92,7 @@ def load_custom_styles():
             padding: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             transition: all var(--transition-speed) ease;
-            border-left: 4px solid var(--primary-color);
+            border-left: 4px solid var(--orange-text);
         }
         
         [data-testid="stMetric"]:hover {
@@ -94,12 +103,13 @@ def load_custom_styles():
         [data-testid="stMetricLabel"] {
             font-size: 1rem;
             font-weight: 600;
+            color: #EB8317;
         }
         
         [data-testid="stMetricValue"] {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: #EB8317;
         }
         
         /* Input field styling with improved focus states */
@@ -110,12 +120,13 @@ def load_custom_styles():
             padding: 0.5rem 1rem;
             transition: all var(--transition-speed) ease;
             background: rgba(255, 255, 255, 0.8);
+            color: #EB8317;
         }
         
         [data-testid="stNumberInput"] > div > div > input:focus,
         .stSelectbox > div > div > input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(98, 54, 255, 0.2);
+            border-color: #EB8317;
+            box-shadow: 0 0 0 2px rgba(235, 131, 23, 0.2);
             background: white;
         }
         
@@ -151,6 +162,11 @@ def load_custom_styles():
             backdrop-filter: blur(10px);
         }
         
+        /* Dataframe text color */
+        [data-testid="stDataFrame"] td, [data-testid="stDataFrame"] th {
+            color: #EB8317;
+        }
+        
         /* Sidebar styling */
         [data-testid="stSidebar"] {
             background-color: rgba(245, 247, 255, 0.8);
@@ -159,9 +175,14 @@ def load_custom_styles():
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
         }
         
+        /* Sidebar text color */
+        [data-testid="stSidebar"] .sidebar-content {
+            color: #EB8317;
+        }
+        
         /* Tooltip styling */
         .stTooltipIcon {
-            color: var(--primary-color);
+            color: #EB8317;
         }
         
         /* Currency card styling */
@@ -173,12 +194,21 @@ def load_custom_styles():
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             transition: all var(--transition-speed) ease;
             margin-bottom: 1rem;
-            border-left: 4px solid var(--primary-color);
+            border-left: 4px solid #EB8317;
         }
         
         .currency-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Currency card text color */
+        .currency-card h4, .currency-card p {
+            color: #EB8317;
+        }
+        
+        .currency-card .value {
+            color: #FFD7C4;
         }
     </style>
     """, unsafe_allow_html=True)
