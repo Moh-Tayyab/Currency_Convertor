@@ -44,10 +44,21 @@ def load_custom_styles():
             text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
         }
         
-        /* Regular text styling with the new peach color */
+        /* Regular text styling with varying colors for visual hierarchy */
         p, li, span, label {
-            color: #FFD7C4;
+            color: var(--dark-text);
             text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Secondary text styling */
+        .secondary-text {
+            color: var(--medium-text);
+        }
+        
+        /* Descriptive text styling */
+        .descriptive-text {
+            color: var(--light-text);
+            font-size: 0.9rem;
         }
         
         /* Button styling with improved hover effects */
@@ -67,7 +78,7 @@ def load_custom_styles():
         /* Primary button styling with gradient using the new color palette */
         .stButton > button[data-baseweb="button"] {
             background: linear-gradient(90deg, #EB8317, #A0C878);
-            color: #FFD7C4;
+            color: #FFFFFF;
         }
         
         /* Card styling for containers with glass morphism effect */
@@ -103,13 +114,13 @@ def load_custom_styles():
         [data-testid="stMetricLabel"] {
             font-size: 1rem;
             font-weight: 600;
-            color: #EB8317;
+            color: var(--medium-text);
         }
         
         [data-testid="stMetricValue"] {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #EB8317;
+            color: var(--dark-text);
         }
         
         /* Input field styling with improved focus states */
@@ -120,7 +131,7 @@ def load_custom_styles():
             padding: 0.5rem 1rem;
             transition: all var(--transition-speed) ease;
             background: rgba(255, 255, 255, 0.8);
-            color: #EB8317;
+            color: var(--dark-text);
         }
         
         [data-testid="stNumberInput"] > div > div > input:focus,
@@ -163,8 +174,13 @@ def load_custom_styles():
         }
         
         /* Dataframe text color */
-        [data-testid="stDataFrame"] td, [data-testid="stDataFrame"] th {
-            color: #EB8317;
+        [data-testid="stDataFrame"] td {
+            color: var(--dark-text);
+        }
+        
+        [data-testid="stDataFrame"] th {
+            color: var(--medium-text);
+            font-weight: 600;
         }
         
         /* Sidebar styling */
@@ -177,12 +193,12 @@ def load_custom_styles():
         
         /* Sidebar text color */
         [data-testid="stSidebar"] .sidebar-content {
-            color: #EB8317;
+            color: var(--dark-text);
         }
         
         /* Tooltip styling */
         .stTooltipIcon {
-            color: #EB8317;
+            color: var(--medium-text);
         }
         
         /* Currency card styling */
@@ -203,12 +219,25 @@ def load_custom_styles():
         }
         
         /* Currency card text color */
-        .currency-card h4, .currency-card p {
-            color: #EB8317;
+        .currency-card h4 {
+            color: var(--dark-text);
+            font-weight: 600;
+        }
+        
+        .currency-card p {
+            color: var(--medium-text);
         }
         
         .currency-card .value {
-            color: #FFD7C4;
+            color: var(--orange-text);
+            font-weight: 700;
+        }
+        
+        /* Value highlighting */
+        .highlight-value {
+            color: var(--orange-text);
+            font-weight: 700;
+            font-size: 1.2rem;
         }
     </style>
     """, unsafe_allow_html=True)
